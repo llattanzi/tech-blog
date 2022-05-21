@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post } = require('../models/');
+const { Post, User, Comment } = require('../models/');
 const withAuth = require('../utils/auth');
 
 // Get all posts
@@ -8,17 +8,18 @@ router.get('/', withAuth, async (req, res) => {
     // store the results of the db query in a variable called postData. should use something that "finds all" from the Post model. may need a where clause!
     postData = await Post.findAll({
       where: {
-        user_id: req.session.user_id
+        userId: req.session.userId
       },
       attributes: [
         'id',
         'title',
+        'content',
         'created_at'
       ],
       include: [
         {
           model: Comment,
-          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+          attributes: ['id', 'comment_text', 'postId', 'userId', 'created_at'],
           include: {
             model: User,
             attributes: ['username']
