@@ -1,0 +1,26 @@
+<h2>
+    Edit Post
+</h2>
+<form id="edit-post-form">
+    <div>
+    <input name="post-title" type="text" value="{{post.title}}" />
+    <input name="post-body" type="text" value="{{post.content}}" />
+    </div>
+    <div>
+    by you on {{format_date post.created_at}}
+    |
+    <a href="/post/{{post.id}}">{{post.comment.length}} {{format_plural "comment" post.comment.length}}</a>
+    </div>
+    <button type="submit">Save post</button>
+    <button type="button" id="delete-btn">Delete post</button>
+</form>
+<form id="new-comment-form">
+<div>
+    <textarea name="comment-body"></textarea>
+</div>
+
+<div>
+    <button type="submit">add comment</button>
+</div>
+{{> comments post.comment}}
+</form>
