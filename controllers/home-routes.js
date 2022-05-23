@@ -29,8 +29,9 @@ router.get('/', async (req, res) => {
     })
     // serialize the data
     const posts = postData.map((post) => post.get({ plain: true }));
+    const loggedIn = req.session.loggedIn;
     // we should render all the posts here
-    res.render('all-posts', { posts, layout: 'main' });
+    res.render('all-posts', { posts, loggedIn, layout: 'main' });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -42,22 +43,36 @@ router.get('/post/:id', async (req, res) => {
     // what should we pass here? we need to get some data passed via the request body (something.something.id?)
     // change the model below, but not the findByPk method.
     const postData = await Post.findByPk(req.params.id, {
-      // helping you out with the include here, no changes necessary
+      attributes: [
+        'id',
+        'title',
+        'content',
+        'created_at'
+      ],
       include: [
-        User,
         {
           model: Comment,
-          include: [User],
+          attributes: ['id', 'comment_text', 'postId', 'userId', 'created_at'],
+          include: {
+            model: User,
+            attributes: ['username']
+          }
         },
-      ],
+        {
+          model: User,
+          attributes: ['username']
+        }
+      ]
     });
 
     if (postData) {
       // serialize the data
       const post = postData.get({ plain: true });
-      // which view should we render for a single-post?
-      res.render('single-post', { post,
-      layout: 'main' });
+      const loggedIn = req.session.loggedIn;
+      res.render('single-post', { 
+        post,
+        loggedIn,
+        layout: 'main' });
     } else {
       res.status(404).end();
     }
