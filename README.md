@@ -17,7 +17,7 @@
   N/A
 
   ## Usage:
-  Visit https://git.heroku.com/frozen-escarpment-70188.git
+  Visit https://frozen-escarpment-70188.herokuapp.com/
 
   ## Licenses:
   MIT<br/>
